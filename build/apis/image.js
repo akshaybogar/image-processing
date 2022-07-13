@@ -45,7 +45,7 @@ var processedImagesFolder = path_1.default.join(__dirname, '../../processed_imag
 var imageResize_1 = __importDefault(require("../utilities/imageResize"));
 var fs_1 = __importDefault(require("fs"));
 var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var filename, height, width, resizedImagePath;
+    var filename, height, width, imageFilePath, processedImageFilePath, resizedImagePath;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -75,7 +75,15 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 if (Number.isNaN(height)) {
                     return [2 /*return*/, res.status(400).send('Provided height value is not integer!')];
                 }
-                if (fs_1.default.existsSync(path_1.default.join(imagesFolder, filename))) {
+                imageFilePath = path_1.default.join(imagesFolder, filename);
+                processedImageFilePath = path_1.default.join(processedImagesFolder, filename.split('.')[0] +
+                    '_' +
+                    width.toString() +
+                    '_' +
+                    height.toString() +
+                    '.' +
+                    filename.split('.')[1]);
+                if (fs_1.default.existsSync(imageFilePath)) {
                     console.log('File exists!');
                 }
                 else {
@@ -83,23 +91,10 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                             .status(400)
                             .send('File does not exist! Please choose from : port.jpeg, scenicview.jpeg, tunnel.jpeg, waterfall.jpeg')];
                 }
-                if (fs_1.default.existsSync(path_1.default.join(processedImagesFolder, filename.split('.')[0] +
-                    '_' +
-                    width.toString() +
-                    '_' +
-                    height.toString() +
-                    '.' +
-                    filename.split('.')[1]))) {
+                // Check and render the image with given width and height if already available
+                if (fs_1.default.existsSync(processedImageFilePath)) {
                     console.log('Rendering processed image');
-                    return [2 /*return*/, res
-                            .status(200)
-                            .sendFile(path_1.default.join(processedImagesFolder, filename.split('.')[0] +
-                            '_' +
-                            width.toString() +
-                            '_' +
-                            height.toString() +
-                            '.' +
-                            filename.split('.')[1]))];
+                    return [2 /*return*/, res.status(200).sendFile(processedImageFilePath)];
                 }
                 return [4 /*yield*/, (0, imageResize_1.default)(filename, width, height)];
             case 1:
@@ -109,15 +104,7 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     return [2 /*return*/, res.status(500).send('Server error while resizing image:(')];
                 }
                 else {
-                    res
-                        .status(200)
-                        .sendFile(path_1.default.join(processedImagesFolder, filename.split('.')[0] +
-                        '_' +
-                        width.toString() +
-                        '_' +
-                        height.toString() +
-                        '.' +
-                        filename.split('.')[1]));
+                    res.status(200).sendFile(resizedImagePath);
                 }
                 return [2 /*return*/];
         }

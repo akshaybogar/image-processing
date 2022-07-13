@@ -38,7 +38,19 @@ const resizeImage = async (req, res) => {
     return res.status(400).send('Provided height value is not integer!');
   }
 
-  if (fs.existsSync(path.join(imagesFolder, filename))) {
+  const imageFilePath = path.join(imagesFolder, filename);
+  const processedImageFilePath = path.join(
+    processedImagesFolder,
+    filename.split('.')[0] +
+      '_' +
+      width.toString() +
+      '_' +
+      height.toString() +
+      '.' +
+      filename.split('.')[1]
+  );
+
+  if (fs.existsSync(imageFilePath)) {
     console.log('File exists!');
   } else {
     return res
@@ -48,35 +60,10 @@ const resizeImage = async (req, res) => {
       );
   }
 
-  if (
-    fs.existsSync(
-      path.join(
-        processedImagesFolder,
-        filename.split('.')[0] +
-          '_' +
-          width.toString() +
-          '_' +
-          height.toString() +
-          '.' +
-          filename.split('.')[1]
-      )
-    )
-  ) {
+  // Check and render the image with given width and height if already available
+  if (fs.existsSync(processedImageFilePath)) {
     console.log('Rendering processed image');
-    return res
-      .status(200)
-      .sendFile(
-        path.join(
-          processedImagesFolder,
-          filename.split('.')[0] +
-            '_' +
-            width.toString() +
-            '_' +
-            height.toString() +
-            '.' +
-            filename.split('.')[1]
-        )
-      );
+    return res.status(200).sendFile(processedImageFilePath);
   }
 
   const resizedImagePath = await imageResize(filename, width, height);
@@ -84,20 +71,7 @@ const resizeImage = async (req, res) => {
   if (resizedImagePath === null) {
     return res.status(500).send('Server error while resizing image:(');
   } else {
-    res
-      .status(200)
-      .sendFile(
-        path.join(
-          processedImagesFolder,
-          filename.split('.')[0] +
-            '_' +
-            width.toString() +
-            '_' +
-            height.toString() +
-            '.' +
-            filename.split('.')[1]
-        )
-      );
+    res.status(200).sendFile(resizedImagePath);
   }
 };
 

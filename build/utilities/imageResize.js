@@ -50,6 +50,7 @@ function imageResize(filename, width, height) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
+                    console.log('Resizing image with given width and height');
                     return [4 /*yield*/, (0, sharp_1.default)(path_1.default.join(imagesFolder, filename))
                             .resize(width, height)
                             .jpeg({ quality: 50 })
