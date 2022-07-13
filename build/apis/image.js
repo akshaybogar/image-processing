@@ -81,6 +81,24 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                             .status(400)
                             .send('File does not exist! Please choose from : port.jpeg, scenicview.jpeg, tunnel.jpeg, waterfall.jpeg')];
                 }
+                if (fs.existsSync(path.join(processedImagesFolder, filename.split('.')[0] +
+                    '_' +
+                    width.toString() +
+                    '_' +
+                    height.toString() +
+                    '.' +
+                    filename.split('.')[1]))) {
+                    console.log('Rendering processed image');
+                    return [2 /*return*/, res
+                            .status(200)
+                            .sendFile(path.join(processedImagesFolder, filename.split('.')[0] +
+                            '_' +
+                            width.toString() +
+                            '_' +
+                            height.toString() +
+                            '.' +
+                            filename.split('.')[1]))];
+                }
                 return [4 /*yield*/, sharp(path.join(imagesFolder, filename))
                         .resize(width, height)
                         .jpeg({ quality: 50 })

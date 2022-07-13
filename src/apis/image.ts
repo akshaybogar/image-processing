@@ -49,6 +49,33 @@ const resizeImage = async (req, res) => {
             );
     }
 
+    if (fs.existsSync(path.join(
+        processedImagesFolder,
+        filename.split('.')[0] +
+        '_' +
+        width.toString() +
+        '_' +
+        height.toString() +
+        '.' +
+        filename.split('.')[1]
+    ))) {
+        console.log('Rendering processed image')
+        return res
+            .status(200)
+            .sendFile(
+                path.join(
+                    processedImagesFolder,
+                    filename.split('.')[0] +
+                    '_' +
+                    width.toString() +
+                    '_' +
+                    height.toString() +
+                    '.' +
+                    filename.split('.')[1]
+                )
+            );
+    }
+
     await sharp(path.join(imagesFolder, filename))
         .resize(width, height)
         .jpeg({ quality: 50 })
