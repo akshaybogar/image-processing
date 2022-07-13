@@ -41,7 +41,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var index_1 = __importDefault(require("../index"));
-//import printMessage from "../index";
+var imageResize_1 = __importDefault(require("../utilities/imageResize"));
+var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
+var processedImagesFolder = path_1.default.join(__dirname, '../../processed_images');
 var request = (0, supertest_1.default)(index_1.default);
 describe('imageResize api response test', function () {
     it('checks for the presence of height and width query params', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -112,6 +115,38 @@ describe('imageResize api response test', function () {
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});
+describe('check if image is resized and stored in processed_images folder', function () {
+    it('successful retuen of resized image', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var filename, width, height, processedImageFilePath, imagePath, filePresence;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    filename = 'waterfall.jpeg';
+                    width = 700;
+                    height = 700;
+                    processedImageFilePath = path_1.default.join(processedImagesFolder, filename.split('.')[0] +
+                        '_' +
+                        width.toString() +
+                        '_' +
+                        height.toString() +
+                        '.' +
+                        filename.split('.')[1]);
+                    console.log('File to be created', processedImageFilePath);
+                    if (fs_1.default.existsSync(processedImageFilePath)) {
+                        console.log('file exists! deleting...');
+                        fs_1.default.unlinkSync(processedImageFilePath);
+                    }
+                    return [4 /*yield*/, (0, imageResize_1.default)(filename, width, height)];
+                case 1:
+                    imagePath = _a.sent();
+                    filePresence = fs_1.default.existsSync(processedImageFilePath);
+                    expect(imagePath).toEqual(processedImageFilePath);
+                    expect(filePresence).toBeTruthy();
                     return [2 /*return*/];
             }
         });
