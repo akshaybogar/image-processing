@@ -55,7 +55,7 @@ describe('imageResize api response test', function () {
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(400);
-                    expect(response.text).toEqual('Height and Width of the image to be displayed not provided!');
+                    expect(response.text).toEqual('"height" and "width" are required and expect integer values!');
                     return [2 /*return*/];
             }
         });
@@ -85,7 +85,7 @@ describe('imageResize api response test', function () {
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(400);
-                    expect(response.text).toEqual('Provided width value is not integer!');
+                    expect(response.text).toEqual('"width" parameter is required and integer value is expected!');
                     return [2 /*return*/];
             }
         });
@@ -100,14 +100,14 @@ describe('imageResize api response test', function () {
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(400);
-                    expect(response.text).toEqual('Provided height value is not integer!');
+                    expect(response.text).toEqual('"height" parameter is required and integer value is expected!');
                     return [2 /*return*/];
             }
         });
     }); });
 });
 describe('imageResize api response test', function () {
-    it('successful retuen of resized image', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('successful return of resized image', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -121,7 +121,7 @@ describe('imageResize api response test', function () {
     }); });
 });
 describe('check if image is resized and stored in processed_images folder', function () {
-    it('successful retuen of resized image', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('successful return of resized image', function () { return __awaiter(void 0, void 0, void 0, function () {
         var filename, width, height, processedImageFilePath, imagePath, filePresence;
         return __generator(this, function (_a) {
             switch (_a.label) {

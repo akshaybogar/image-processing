@@ -49,31 +49,27 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                filename = req.query.filename;
-                height = req.query.height;
-                width = req.query.width;
+                filename = String(req.query.filename);
+                height = Number(req.query.height);
+                width = Number(req.query.width);
+                console.log(filename, width, height);
                 if (!width && !height) {
-                    return [2 /*return*/, res
-                            .status(400)
-                            .send('Height and Width of the image to be displayed not provided!')];
+                    res
+                        .status(400)
+                        .send('"height" and "width" are required and expect integer values!');
+                    return [2 /*return*/];
                 }
                 if (!width) {
-                    return [2 /*return*/, res
-                            .status(400)
-                            .send('Width of the image to be displayed not provided!')];
+                    res
+                        .status(400)
+                        .send('"width" parameter is required and integer value is expected!');
+                    return [2 /*return*/];
                 }
                 if (!height) {
-                    return [2 /*return*/, res
-                            .status(400)
-                            .send('Height of the image to be displayed not provided!')];
-                }
-                height = parseInt(height);
-                width = parseInt(width);
-                if (Number.isNaN(width)) {
-                    return [2 /*return*/, res.status(400).send('Provided width value is not integer!')];
-                }
-                if (Number.isNaN(height)) {
-                    return [2 /*return*/, res.status(400).send('Provided height value is not integer!')];
+                    res
+                        .status(400)
+                        .send('"height" parameter is required and integer value is expected!');
+                    return [2 /*return*/];
                 }
                 imageFilePath = path_1.default.join(imagesFolder, filename);
                 processedImageFilePath = path_1.default.join(processedImagesFolder, filename.split('.')[0] +
@@ -87,21 +83,23 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     console.log('File exists!');
                 }
                 else {
-                    return [2 /*return*/, res
-                            .status(400)
-                            .send('File does not exist! Please choose from : port.jpeg, scenicview.jpeg, tunnel.jpeg, waterfall.jpeg')];
+                    res
+                        .status(400)
+                        .send('File does not exist! Please choose from : port.jpeg, scenicview.jpeg, tunnel.jpeg, waterfall.jpeg');
+                    return [2 /*return*/];
                 }
                 // Check and render the image with given width and height if already available
                 if (fs_1.default.existsSync(processedImageFilePath)) {
                     console.log('Rendering processed image');
-                    return [2 /*return*/, res.status(200).sendFile(processedImageFilePath)];
+                    res.status(200).sendFile(processedImageFilePath);
+                    return [2 /*return*/];
                 }
                 return [4 /*yield*/, (0, imageResize_1.default)(filename, width, height)];
             case 1:
                 resizedImagePath = _a.sent();
                 console.log('Resized image path', resizedImagePath);
                 if (resizedImagePath === null) {
-                    return [2 /*return*/, res.status(500).send('Server error while resizing image:(')];
+                    res.status(500).send('Server error while resizing image:(');
                 }
                 else {
                     res.status(200).sendFile(resizedImagePath);

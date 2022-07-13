@@ -3,7 +3,11 @@ const imagesFolder = path.join(__dirname, '../../images');
 const processedImagesFolder = path.join(__dirname, '../../processed_images');
 import sharp from 'sharp';
 
-async function imageResize(filename: string, width: number, height: number) {
+async function imageResize(
+  filename: string,
+  width: number,
+  height: number
+): Promise<null | string> {
   try {
     console.log('Resizing image with given width and height');
     await sharp(path.join(imagesFolder, filename))
