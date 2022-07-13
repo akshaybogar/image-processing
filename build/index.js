@@ -8,4 +8,9 @@ var imageRoutes = require('./routes/image');
 var app = (0, express_1.default)();
 var port = 5000;
 app.use('/api', imageRoutes.routes);
+/*function printMessage() {
+    return ('Jasmine configured properly!');
+}
+*/
 app.listen(port, function () { return console.log("App is listening on port ".concat(port)); });
+exports.default = app;
