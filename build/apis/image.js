@@ -35,15 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var image = require('../routes/image');
-var path = require('path');
-var imagesFolder = path.join(__dirname, '../../images');
-var processedImagesFolder = path.join(__dirname, '../../processed_images');
-var fs = require('fs');
-var sharp = require('sharp');
+var path_1 = __importDefault(require("path"));
+var imagesFolder = path_1.default.join(__dirname, '../../images');
+var processedImagesFolder = path_1.default.join(__dirname, '../../processed_images');
+var imageResize_1 = __importDefault(require("../utilities/imageResize"));
+var fs_1 = __importDefault(require("fs"));
 var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var filename, height, width;
+    var filename, height, width, resizedImagePath;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -73,7 +75,7 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 if (Number.isNaN(height)) {
                     return [2 /*return*/, res.status(400).send('Provided height value is not integer!')];
                 }
-                if (fs.existsSync(path.join(imagesFolder, filename))) {
+                if (fs_1.default.existsSync(path_1.default.join(imagesFolder, filename))) {
                     console.log('File exists!');
                 }
                 else {
@@ -81,7 +83,7 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                             .status(400)
                             .send('File does not exist! Please choose from : port.jpeg, scenicview.jpeg, tunnel.jpeg, waterfall.jpeg')];
                 }
-                if (fs.existsSync(path.join(processedImagesFolder, filename.split('.')[0] +
+                if (fs_1.default.existsSync(path_1.default.join(processedImagesFolder, filename.split('.')[0] +
                     '_' +
                     width.toString() +
                     '_' +
@@ -91,7 +93,7 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     console.log('Rendering processed image');
                     return [2 /*return*/, res
                             .status(200)
-                            .sendFile(path.join(processedImagesFolder, filename.split('.')[0] +
+                            .sendFile(path_1.default.join(processedImagesFolder, filename.split('.')[0] +
                             '_' +
                             width.toString() +
                             '_' +
@@ -99,27 +101,24 @@ var resizeImage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                             '.' +
                             filename.split('.')[1]))];
                 }
-                return [4 /*yield*/, sharp(path.join(imagesFolder, filename))
-                        .resize(width, height)
-                        .jpeg({ quality: 50 })
-                        .toFile(path.join(processedImagesFolder, filename.split('.')[0] +
+                return [4 /*yield*/, (0, imageResize_1.default)(filename, width, height)];
+            case 1:
+                resizedImagePath = _a.sent();
+                console.log('Resized image path', resizedImagePath);
+                if (resizedImagePath === null) {
+                    return [2 /*return*/, res.status(500).send('Server error while resizing image:(')];
+                }
+                else {
+                    res
+                        .status(200)
+                        .sendFile(path_1.default.join(processedImagesFolder, filename.split('.')[0] +
                         '_' +
                         width.toString() +
                         '_' +
                         height.toString() +
                         '.' +
-                        filename.split('.')[1]))];
-            case 1:
-                _a.sent();
-                res
-                    .status(200)
-                    .sendFile(path.join(processedImagesFolder, filename.split('.')[0] +
-                    '_' +
-                    width.toString() +
-                    '_' +
-                    height.toString() +
-                    '.' +
-                    filename.split('.')[1]));
+                        filename.split('.')[1]));
+                }
                 return [2 /*return*/];
         }
     });

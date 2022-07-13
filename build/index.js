@@ -4,10 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var imageRoutes = require('./routes/image');
+//const imageRoutes = require('./routes/image');
+var image_1 = __importDefault(require("./routes/image"));
+var image_2 = __importDefault(require("./apis/image"));
 var app = (0, express_1.default)();
 var port = 5000;
-app.use('/api', imageRoutes.routes);
+app.use('/api', image_1.default.get('/imageResize', image_2.default));
 /*function printMessage() {
     return ('Jasmine configured properly!');
 }
